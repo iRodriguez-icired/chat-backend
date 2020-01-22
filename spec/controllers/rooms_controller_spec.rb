@@ -29,5 +29,10 @@ RSpec.describe RoomsController, type: :controller do
             expect(dbroom).not_to eq nil
         end
         
+        it "returns a 400 status code if room creation fails" do
+            @params = { "name": "" }
+            post :create, params: @params
+            expect(response).to have_http_status(400)
+        end
     end
 end

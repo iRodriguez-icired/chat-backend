@@ -6,9 +6,11 @@ class RoomsController < ApplicationController
   end
   
   def create
-    @room = Room.create(name: params[:name])
-    if @room
+    @room = Room.new(name: params[:name])
+    if @room.save
       render json: {room: @room}, status: 201
+    else
+      render json: {message: "La sala no pudo ser creada"}, status: 400
     end
     
   end
