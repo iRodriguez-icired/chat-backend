@@ -27,7 +27,7 @@ RSpec.describe RoomsController, type: :controller do
             expect(JSONResponse["room"]["name"]).to eq(@params[:name])
             dbroom = Room.find_by(name: JSONResponse["room"]["name"])
             expect(dbroom).not_to eq nil
-            
         end
+        
     end
 end
