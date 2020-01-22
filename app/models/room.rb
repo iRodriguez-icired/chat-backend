@@ -9,4 +9,6 @@ class Room
   
   #Relations
   has_many :messages, class_name: "Message"
+  
+  
 end
