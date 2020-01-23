@@ -41,4 +41,12 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.hosts.clear
+  config.action_cable.url = 'http://192.168.0.32:3000/chat'
+  config.web_socket_server_url = 'ws://192.168.0.32:3000/chat'
+  config.action_cable.allowed_request_origins = [
+    # Local address of our RoR server
+   'http://192.168.0.32:3000',
+    # Local address we use for our React standalone client
+   'http://localhost:8080',
+ ]
 end
