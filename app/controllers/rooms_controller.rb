@@ -14,4 +14,11 @@ class RoomsController < ApplicationController
     end
     
   end
+
+  def show
+    id = params[:id]
+    messages = Message.where(room_id: id).to_a
+    messages = messages.reverse.take(20)
+    render json: {messages: messages}, status: 200
+  end
 end

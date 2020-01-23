@@ -35,4 +35,11 @@ RSpec.describe RoomsController, type: :controller do
             expect(response).to have_http_status(400)
         end
     end
+
+    describe "GET /rooms/:id" do
+        it "should return a 200 code and the last 20 messages of the room is request is valid" do
+            get :show,
+        end
+
+    end
 end
