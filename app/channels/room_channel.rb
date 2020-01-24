@@ -1,6 +1,6 @@
 class RoomChannel < ApplicationCable::Channel
   def subscribed
-    stream_from room
+    stream_from "room_#{room.id}"
   end
 
   def unsubscribed
@@ -8,7 +8,7 @@ class RoomChannel < ApplicationCable::Channel
   end
 
   def room
-    Room.find(params[:id])
+    @room = Room.find(params[:id])
   end
 
   def receive(data)
@@ -16,6 +16,8 @@ class RoomChannel < ApplicationCable::Channel
       author = data["content"]["author"]
       room_id = Room.find(data["content"]["room_id"]).id
       @message = Message.create(text: text, author: author, room_id: room_id)
-      ActionCable.server.broadcast(room, @message)
+      ActionCable.server.broadcast "room_#{room.id}", {
+        message: @message
+      }
   end
 end
