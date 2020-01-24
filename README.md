@@ -1,24 +1,17 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Para instalar y lanzar la aplicación:
 
-Things you may want to cover:
+* Version ruby: 2.6.3
 
-* Ruby version
+* Version Rails: 6.0.2.1
 
-* System dependencies
+* Clonar repositorio: git clone https://github.com/iRodriguez-icired/chat-backend.git
 
-* Configuration
+* Instalar dependencias: bundle install (en la raíz del proyecto)
 
-* Database creation
+* Lanzar el servidor: rails server
 
-* Database initialization
+* Nota: Si se va a acceder desde otro pc, lanzar servidor con el comando rails server -b [ip_host]
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+El Front-end de este proyecto se encuentra en el repositorio: https://github.com/IciredAtenllado/Proyecto
