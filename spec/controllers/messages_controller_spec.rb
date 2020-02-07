@@ -14,9 +14,32 @@ RSpec.describe MessagesController, type: :controller do
                              .paginate(page: 1, per_page: 20)
                              .reverse
 
-      get :index, params: {id: room.id}
+      get :index, params: {room_id: room.id}
+      JSON_response = JSON.parse response.body
 
-      expect(response.messages).to eq room_messages
+      response_ids = []
+      JSON_response['messages'].each do |message|
+        response_ids.push(message['_id'])
+      end
+
+      room_messages_ids = []
+      room_messages.each do |message|
+        room_messages_ids.push(message['_id'].as_json)
+      end
+
+      expect(response_ids).to eq room_messages_ids
+    end
+  end
+
+  describe 'POST /messages' do
+    it 'create a new message into database' do
+      room_id = create(:room).id
+      post :create, params: {message: {room_id: room_id, text: 'nacho', author: 'nacho'}}
+      JSON_response = JSON.parse response.body
+      generated_message_id = JSON_response['message']['_id']
+
+      db_message = Message.find(generated_message_id)
+      expect(db_message).not_to eq nil
     end
   end
 end
