@@ -8,5 +8,5 @@ class Room
   validates :name, presence: true, uniqueness: true
 
   # Relations
-  has_many :messages, class_name: 'Message'
+  has_many :messages, dependent: :destroy, class_name: 'Message'
 end

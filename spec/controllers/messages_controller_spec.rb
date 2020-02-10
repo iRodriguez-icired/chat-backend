@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MessagesController, type: :controller do
   describe 'GET /messages' do
-    it 'return a list of 20 last messages of a room when it receive a valid id and get a 200 code' do
+    it 'return a list of 20 last messages id is valid and get a 200 code' do
       room = create(:room)
 
       40.times do |i|
@@ -30,6 +30,16 @@ RSpec.describe MessagesController, type: :controller do
       expect(response_ids).to eq room_messages_ids
       expect(response).to have_http_status(200)
     end
+
+    it "return a 404 message error and a message if room doesn't exist" do
+      room_id = 1234
+
+      get :index, params: {room_id: room_id}
+      JSON_response = JSON.parse response.body
+
+      expect(response).to have_http_status(404)
+      expect(JSON_response['message']).to eq(I18n.t('room_doesnt_exist'))
+    end
   end
 
   describe 'POST /messages' do
@@ -42,6 +52,33 @@ RSpec.describe MessagesController, type: :controller do
       db_message = Message.find(generated_message_id)
       expect(db_message).not_to eq nil
       expect(response).to have_http_status(201)
+    end
+
+    it 'returns a 404 code if message.room_id doesnt belong to an existent room' do
+      room_id = 1234
+      post :create, params: {message: {room_id: room_id, text: 'nacho', author: 'nacho'}}
+      JSON_response = JSON.parse response.body
+
+      expect(response).to have_http_status(404)
+      expect(JSON_response['message']).to eq(I18n.t('room_doesnt_exist'))
+    end
+
+    it 'returns a 422 code and a message if text is blank' do
+      room_id = create(:room).id
+      post :create, params: {message: {room_id: room_id, text: '', author: 'nacho'}}
+      JSON_response = JSON.parse response.body
+
+      expect(response).to have_http_status(422)
+      expect(JSON_response['message']).to eq(I18n.t('message_params_must_be_present'))
+    end
+
+    it 'returns a 422 code and a message if author is blank' do
+      room_id = create(:room).id
+      post :create, params: {message: {room_id: room_id, text: 'hola', author: ''}}
+      JSON_response = JSON.parse response.body
+
+      expect(response).to have_http_status(422)
+      expect(JSON_response['message']).to eq(I18n.t('message_params_must_be_present'))
     end
   end
 end
