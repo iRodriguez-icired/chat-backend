@@ -1,7 +1,7 @@
 class RoomsController < ApplicationController
   def index
     rooms = Room.all
-    render json: {'rooms' => rooms}, status: 201
+    render json: {'rooms' => rooms}, status: 200
   end
 
   def create
@@ -9,7 +9,7 @@ class RoomsController < ApplicationController
     if @room.save
       render json: {room: @room}, status: 201
     else
-      render json: {message: 'La sala no pudo ser creada'}, status: 400
+      render json: {message: I18n.t('room_creation_failed')}, status: 422
     end
   end
 

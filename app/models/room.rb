@@ -1,14 +1,12 @@
 class Room
   include Mongoid::Document
-  
-  #Fields
+
+  # Fields
   field :name, type: String
-  
-  #Validations
+
+  # Validations
   validates :name, presence: true, uniqueness: true
-  
-  #Relations
-  has_many :messages, class_name: "Message"
-  
-  
+
+  # Relations
+  has_many :messages, class_name: 'Message'
 end

@@ -1,1 +1,2 @@
 es:
+  room_creation_failed: 'La sala no pudo ser creada. Se necesita campo name.'

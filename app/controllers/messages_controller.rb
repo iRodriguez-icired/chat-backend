@@ -4,7 +4,7 @@ class MessagesController < ApplicationController
     @message = Message.create("text": message_params['text'],
                               "author": message_params['author'],
                               "room_id": @room_id)
-    render json: {message: @message}
+    render json: {message: @message}, status: 201
   end
 
   def index
@@ -13,7 +13,7 @@ class MessagesController < ApplicationController
                            .order('created_at DESC')
                            .paginate(page: 1, per_page: 20)
                            .reverse
-    render json: {messages: room_messages}
+    render json: {messages: room_messages}, status: 200
   end
 
   private
