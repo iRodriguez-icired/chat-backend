@@ -12,12 +12,11 @@ class RoomChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-      text = data["content"]["text"]
-      author = data["content"]["author"]
-      room_id = Room.find(data["content"]["room_id"]).id
-      @message = Message.create(text: text, author: author, room_id: room_id)
-      ActionCable.server.broadcast "room_#{room.id}", {
-        message: @message
-      }
+    text = data['content']['text']
+    author = data['content']['author']
+    room_id = Room.find(data['content']['room_id']).id
+    @message = Message.create(text: text, author: author, room_id: room_id)
+    ActionCable.server.broadcast "room_#{room.id}",
+                                 message: @message
   end
 end
