@@ -1,11 +1,11 @@
 class MessagesController < ApplicationController
+  include MessagesConcern
   def create
     @room = Room.find(message_params['room_id'])
     if @room
-      @room_id = @room.id
       @message = Message.new("text": message_params['text'],
                              "author": message_params['author'],
-                             "room_id": @room_id)
+                             "room_id": @room.id)
       if @message.save
         render json: {message: @message}, status: 201
       else
@@ -34,11 +34,5 @@ class MessagesController < ApplicationController
 
   def index_params
     params.permit(:room_id)
-  end
-
-  def order_messages(messages_list)
-    messages_list.order('created_at DESC')
-                 .paginate(page: 1, per_page: 20)
-                 .reverse
   end
 end
