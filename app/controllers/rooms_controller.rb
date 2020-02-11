@@ -6,10 +6,15 @@ class RoomsController < ApplicationController
 
   def create
     @room = Room.new(name: create_params[:name])
+    uniqueness = Room.find_by(name: @room.name).nil?
     if @room.save
       render json: {room: @room}, status: 201
     else
-      render json: {message: I18n.t('room_creation_failed')}, status: 422
+      if uniqueness
+        render json: {message: I18n.t('room_creation_failed')}, status: 422
+      else
+        render json: {message: I18n.t('room_creation_failed_not_unique')}, status: 422
+      end
     end
   end
 

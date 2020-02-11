@@ -37,5 +37,15 @@ RSpec.describe RoomsController, type: :controller do
       JSON_response = JSON.parse response.body
       expect(JSON_response['message']).to eq(I18n.t('room_creation_failed'))
     end
+
+    it 'returns a 422 status code if room name is not unique' do
+      room = Room.create(name: 'Room')
+      params = {"name": room.name}
+      post :create, params: params
+      expect(response).to have_http_status(422)
+
+      JSON_response = JSON.parse response.body
+      expect(JSON_response['message']).to eq(I18n.t('room_creation_failed_not_unique'))
+    end
   end
 end

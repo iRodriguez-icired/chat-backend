@@ -1,4 +1,5 @@
 es:
   room_creation_failed: 'La sala no pudo ser creada. Se necesita campo name.'
+  room_creation_failed_not_unique: 'La sala no pudo ser creada. Name debe ser unico.'
   room_doesnt_exist: 'El id de la sala no corresponde a ninguna sala existente.'
   message_params_must_be_present: 'Para crear el mensaje, el texto y el autor no pueden ir en blanco'
