@@ -1,10 +1,8 @@
 class MessagesController < ApplicationController
   def create
-    @room = Room.find(message_params['room_id'])
+    @room = Room.find(create_params['room_id'])
     if @room
-      @message = Message.new("text": message_params['text'],
-                             "author": message_params['author'],
-                             "room_id": @room.id)
+      @message = Message.new(create_params)
       if @message.save
         render json: {message: @message}, status: 201
       else
@@ -27,8 +25,8 @@ class MessagesController < ApplicationController
 
   private
 
-  def message_params
-    params.require(:message).permit(:text, :author, :room_id)
+  def create_params
+    params.permit(:text, :author, :room_id)
   end
 
   def index_params
