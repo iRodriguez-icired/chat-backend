@@ -44,5 +44,7 @@ module AppChat
 
     I18n.available_locales = %i[en es]
     I18n.default_locale = :es
+
+    Faker::Config.locale = :es
   end
 end

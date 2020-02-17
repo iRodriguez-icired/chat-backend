@@ -4,7 +4,8 @@ FactoryGirl.define do
   end
 
   factory :message do
-    text 'Texto mensaje'
-    author 'Nacho'
+    text 'texto'
+    author 'autor'
+    room_id 'id'
   end
 end

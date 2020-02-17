@@ -1,13 +1,13 @@
 require 'rails_helper'
+require 'faker'
 
 RSpec.describe MessagesController, type: :controller do
   describe 'GET /messages' do
     it 'return a list of 20 last messages id is valid and get a 200 code' do
       room = create(:room)
-
-      40.times do |i|
-        Message.create(text: "hola #{i}", author: 'nacho', room_id: room.id)
-      end
+      create_list(:message, 40, text: Faker::Lorem.sentence,
+                                author: Faker::Name.first_name,
+                                room_id: room.id)
 
       room_messages = Message.where(room_id: room.id)
                              .order('created_at DESC')
