@@ -35,7 +35,6 @@ RSpec.describe RoomsController, type: :controller do
       expect(response).to have_http_status(422)
 
       JSON_response = JSON.parse response.body
-      puts JSON_response['errors']
       expect(JSON_response['errors']).not_to eq(nil)
     end
 
@@ -46,7 +45,6 @@ RSpec.describe RoomsController, type: :controller do
       expect(response).to have_http_status(422)
 
       JSON_response = JSON.parse response.body
-      puts JSON_response['errors']
       expect(JSON_response['errors']).not_to eq(nil)
     end
   end

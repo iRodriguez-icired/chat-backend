@@ -1,5 +1,4 @@
 class MessagesController < ApplicationController
-  include MessagesConcern
   def create
     @room = Room.find(message_params['room_id'])
     if @room
@@ -19,7 +18,7 @@ class MessagesController < ApplicationController
   def index
     room_id = index_params[:room_id]
     if Room.find(room_id)
-      room_messages = order_messages Message.where(room_id: room_id)
+      room_messages = Message.paginated_and_reversed(room_id)
       render json: {messages: room_messages}, status: 200
     else
       render json: {message: I18n.t('room_doesnt_exist')}, status: 404
