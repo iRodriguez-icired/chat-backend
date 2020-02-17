@@ -38,7 +38,7 @@ RSpec.describe MessagesController, type: :controller do
       JSON_response = JSON.parse response.body
 
       expect(response).to have_http_status(404)
-      expect(JSON_response['message']).to eq(I18n.t('room_doesnt_exist'))
+      expect(JSON_response['errors']).not_to eq(nil)
     end
   end
 
@@ -59,8 +59,9 @@ RSpec.describe MessagesController, type: :controller do
       post :create, params: {message: {room_id: room_id, text: 'nacho', author: 'nacho'}}
       JSON_response = JSON.parse response.body
 
+      puts JSON_response['errors']
       expect(response).to have_http_status(404)
-      expect(JSON_response['message']).to eq(I18n.t('room_doesnt_exist'))
+      expect(JSON_response['errors']).not_to eq(nil)
     end
 
     it 'returns a 422 code and a message if text is blank' do
@@ -68,8 +69,9 @@ RSpec.describe MessagesController, type: :controller do
       post :create, params: {message: {room_id: room_id, text: '', author: 'nacho'}}
       JSON_response = JSON.parse response.body
 
+      puts JSON_response['errors']
       expect(response).to have_http_status(422)
-      expect(JSON_response['message']).to eq(I18n.t('message_params_must_be_present'))
+      expect(JSON_response['errors']).not_to eq(nil)
     end
 
     it 'returns a 422 code and a message if author is blank' do
@@ -78,7 +80,7 @@ RSpec.describe MessagesController, type: :controller do
       JSON_response = JSON.parse response.body
 
       expect(response).to have_http_status(422)
-      expect(JSON_response['message']).to eq(I18n.t('message_params_must_be_present'))
+      expect(JSON_response['errors']).not_to eq(nil)
     end
   end
 end

@@ -8,10 +8,10 @@ class MessagesController < ApplicationController
       if @message.save
         render json: {message: @message}, status: 201
       else
-        render json: {message: I18n.t('message_params_must_be_present')}, status: 422
+        render json: {errors: @message.errors.details}, status: 422
       end
     else
-      render json: {message: I18n.t('room_doesnt_exist')}, status: 404
+      render json: {errors: {'text': [{error: 'not_found'}]}}, status: 404
     end
   end
 
@@ -21,7 +21,7 @@ class MessagesController < ApplicationController
       room_messages = Message.paginated_and_reversed(room_id)
       render json: {messages: room_messages}, status: 200
     else
-      render json: {message: I18n.t('room_doesnt_exist')}, status: 404
+      render json: {errors: {'text': [{error: 'not_found'}]}}, status: 404
     end
   end
 
