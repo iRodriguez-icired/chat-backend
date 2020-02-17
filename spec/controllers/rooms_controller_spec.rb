@@ -29,23 +29,25 @@ RSpec.describe RoomsController, type: :controller do
       expect(dbroom).not_to eq nil
     end
 
-    it 'returns a 400 status code if room creation fails and show a message error' do
+    it 'returns a 422 status code if room creation fails and show a message error' do
       @params = {"name": ''}
       post :create, params: @params
       expect(response).to have_http_status(422)
 
       JSON_response = JSON.parse response.body
-      expect(JSON_response['message']).to eq(I18n.t('room_creation_failed'))
+      puts JSON_response['errors']
+      expect(JSON_response['errors']).not_to eq(nil)
     end
 
     it 'returns a 422 status code if room name is not unique' do
-      room = Room.create(name: 'Room')
+      room = Room.create(name: 'SALA')
       params = {"name": room.name}
       post :create, params: params
       expect(response).to have_http_status(422)
 
       JSON_response = JSON.parse response.body
-      expect(JSON_response['message']).to eq(I18n.t('room_creation_failed_not_unique'))
+      puts JSON_response['errors']
+      expect(JSON_response['errors']).not_to eq(nil)
     end
   end
 end
