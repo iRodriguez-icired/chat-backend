@@ -5,11 +5,11 @@ class RoomsController < ApplicationController
   end
 
   def create
-    @room = Room.new(create_params)
-    if @room.save
-      render json: {room: @room}, status: 201
+    room = Room.new(create_params)
+    if room.save
+      render json: {room: room}, status: 201
     else
-      render json: {errors: @room.errors.details}, status: 422
+      render json: {errors: room.errors.details}, status: 422
     end
   end
 

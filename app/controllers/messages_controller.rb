@@ -1,12 +1,11 @@
 class MessagesController < ApplicationController
   def create
-    @room = Room.find(create_params['room_id'])
-    if @room
-      @message = Message.new(create_params)
-      if @message.save
-        render json: {message: @message}, status: 201
+    if Room.find(create_params['room_id'])
+      message = Message.new(create_params)
+      if message.save
+        render json: {message: message}, status: 201
       else
-        render json: {errors: @message.errors.details}, status: 422
+        render json: {errors: message.errors.details}, status: 422
       end
     else
       render json: {errors: {'text': [{error: 'not_found'}]}}, status: 404
