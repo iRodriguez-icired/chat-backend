@@ -9,16 +9,13 @@ RSpec.describe MessagesController, type: :controller do
                                 author: Faker::Name.first_name,
                                 room_id: room.id)
 
-      room_messages = Message.where(room_id: room.id)
-                             .order('created_at DESC')
-                             .paginate(page: 1, per_page: 20)
-                             .reverse
+      room_messages = Message.paginated_and_reversed(room.id)
 
       get :index, params: {room_id: room.id}
-      JSON_response = JSON.parse response.body
+      json_response = JSON.parse response.body
 
       response_ids = []
-      JSON_response['messages'].each do |message|
+      json_response['messages'].each do |message|
         response_ids.push(message['_id'])
       end
 
@@ -35,10 +32,10 @@ RSpec.describe MessagesController, type: :controller do
       room_id = 1234
 
       get :index, params: {room_id: room_id}
-      JSON_response = JSON.parse response.body
+      json_response = JSON.parse response.body
 
       expect(response).to have_http_status(404)
-      expect(JSON_response['errors']).not_to eq(nil)
+      expect(json_response['errors']).not_to eq(nil)
     end
   end
 
@@ -46,8 +43,8 @@ RSpec.describe MessagesController, type: :controller do
     it 'create a new message into database and receive a 201 status code' do
       room_id = create(:room).id
       post :create, params: {room_id: room_id, text: 'nacho', author: 'nacho'}
-      JSON_response = JSON.parse response.body
-      generated_message_id = JSON_response['message']['_id']
+      json_response = JSON.parse response.body
+      generated_message_id = json_response['message']['_id']
 
       db_message = Message.find(generated_message_id)
       expect(db_message).not_to eq nil
@@ -57,28 +54,28 @@ RSpec.describe MessagesController, type: :controller do
     it 'returns a 404 code if message.room_id doesnt belong to an existent room' do
       room_id = 1234
       post :create, params: {room_id: room_id, text: 'nacho', author: 'nacho'}
-      JSON_response = JSON.parse response.body
+      json_response = JSON.parse response.body
 
       expect(response).to have_http_status(404)
-      expect(JSON_response['errors']).not_to eq(nil)
+      expect(json_response['errors']).not_to eq(nil)
     end
 
     it 'returns a 422 code and a message if text is blank' do
       room_id = create(:room).id
       post :create, params: {room_id: room_id, text: '', author: 'nacho'}
-      JSON_response = JSON.parse response.body
+      json_response = JSON.parse response.body
 
       expect(response).to have_http_status(422)
-      expect(JSON_response['errors']).not_to eq(nil)
+      expect(json_response['errors']).not_to eq(nil)
     end
 
     it 'returns a 422 code and a message if author is blank' do
       room_id = create(:room).id
       post :create, params: {room_id: room_id, text: 'hola', author: ''}
-      JSON_response = JSON.parse response.body
+      json_response = JSON.parse response.body
 
       expect(response).to have_http_status(422)
-      expect(JSON_response['errors']).not_to eq(nil)
+      expect(json_response['errors']).not_to eq(nil)
     end
   end
 end

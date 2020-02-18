@@ -5,16 +5,16 @@ RSpec.describe RoomsController, type: :controller do
     it 'returns a 201 status code and show an empty array when database is clear' do
       get :index
       expect(response).to have_http_status(200)
-      JSON_response = JSON.parse response.body
-      expect(JSON_response['rooms']).to be_empty
+      json_response = JSON.parse response.body
+      expect(json_response['rooms']).to be_empty
     end
 
     it 'returns a 201 status code and a list of results when database has entries' do
       @room = Room.create(name: 'Room')
       get :index
       expect(response).to have_http_status(200)
-      JSON_response = JSON.parse response.body
-      expect(JSON_response['rooms']).not_to be_empty
+      json_response = JSON.parse response.body
+      expect(json_response['rooms']).not_to be_empty
     end
   end
 
@@ -23,9 +23,9 @@ RSpec.describe RoomsController, type: :controller do
       @params = {"name": 'Sala 1'}
       post :create, params: @params
       expect(response).to have_http_status(201)
-      JSON_response = JSON.parse response.body
-      expect(JSON_response['room']['name']).to eq(@params[:name])
-      dbroom = Room.find_by(name: JSON_response['room']['name'])
+      json_response = JSON.parse response.body
+      expect(json_response['room']['name']).to eq(@params[:name])
+      dbroom = Room.find_by(name: json_response['room']['name'])
       expect(dbroom).not_to eq nil
     end
 
@@ -34,8 +34,8 @@ RSpec.describe RoomsController, type: :controller do
       post :create, params: @params
       expect(response).to have_http_status(422)
 
-      JSON_response = JSON.parse response.body
-      expect(JSON_response['errors']).not_to eq(nil)
+      json_response = JSON.parse response.body
+      expect(json_response['errors']).not_to eq(nil)
     end
 
     it 'returns a 422 status code if room name is not unique' do
@@ -44,8 +44,8 @@ RSpec.describe RoomsController, type: :controller do
       post :create, params: params
       expect(response).to have_http_status(422)
 
-      JSON_response = JSON.parse response.body
-      expect(JSON_response['errors']).not_to eq(nil)
+      json_response = JSON.parse response.body
+      expect(json_response['errors']).not_to eq(nil)
     end
   end
 end
