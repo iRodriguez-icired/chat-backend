@@ -3,12 +3,12 @@ require 'faker'
 
 RSpec.describe MessagesController, type: :controller do
   describe 'GET /messages' do
-    it 'return a list of 20 last messages id is valid and get a 200 code' do
+    it 'return a list of 20 last messages if is valid and get a 200 code' do
       room = create(:room)
       create_list(:message, 40, room_id: room.id)
-      room_messages = Message.paginated_and_reversed(room.id)
+      room_messages = Message.paginated_and_reversed(room.id, nil, nil, 'created_at DESC')
 
-      get :index, params: {room_id: room.id}
+      get :index, params: {room_id: room.id, sort: 'created_at'}
       json_response = JSON.parse response.body
 
       response_ids = []

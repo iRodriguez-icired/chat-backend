@@ -9,7 +9,7 @@ class RoomsController < ApplicationController
     if room.save
       render json: {room: room}, status: 201
     else
-      render json: {errors: room.errors.details}, status: 422
+      render_error_from_details(room.errors.details, 422)
     end
   end
 

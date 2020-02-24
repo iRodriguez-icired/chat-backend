@@ -5,20 +5,21 @@ class MessagesController < ApplicationController
       if message.save
         render json: {message: message}, status: 201
       else
-        render json: {errors: message.errors.details}, status: 422
+        render_error_from_details(message.errors.details, 422)
       end
     else
-      render json: {errors: {'text': [{error: 'not_found'}]}}, status: 404
+      render_error('not_found', 404)
     end
   end
 
   def index
-    room_id = index_params[:room_id]
-    if Room.find(room_id)
-      room_messages = Message.paginated_and_reversed(room_id)
+    if Room.find(index_params[:room_id])
+      sort = define_sort(index_params[:sort])
+      puts sort
+      room_messages = Message.paginated_and_reversed(index_params[:room_id], nil, nil, sort)
       render json: {messages: room_messages}, status: 200
     else
-      render json: {errors: {'text': [{error: 'not_found'}]}}, status: 404
+      render_error('not_found', 404)
     end
   end
 
@@ -29,6 +30,12 @@ class MessagesController < ApplicationController
   end
 
   def index_params
-    params.permit(:room_id)
+    params.permit(:room_id, :sort)
+  end
+
+  def define_sort(sort_param)
+    order = sort_param[0] == '-' ? ' ASC' : ' DESC'
+    sort_param[0] = '' if sort_param[0] == '-'
+    sort_param + order
   end
 end
