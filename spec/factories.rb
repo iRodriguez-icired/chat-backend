@@ -4,8 +4,8 @@ FactoryGirl.define do
   end
 
   factory :message do
-    text 'texto'
-    author 'autor'
+    text Faker::Lorem.sentence
+    author Faker::Name.first_name
     room_id 'id'
   end
 end
