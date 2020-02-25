@@ -15,7 +15,6 @@ class MessagesController < ApplicationController
   def index
     if Room.find(index_params[:room_id])
       sort = define_sort(index_params[:sort])
-      puts sort
       room_messages = Message.paginated_and_reversed(index_params[:room_id], nil, nil, sort)
       render json: {messages: room_messages}, status: 200
     else
