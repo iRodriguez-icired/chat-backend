@@ -16,7 +16,8 @@ class MessagesController < ApplicationController
     if Room.find(index_params[:room_id])
       sort = define_sort(index_params[:sort])
       room_messages = Message.paginated_and_reversed(index_params[:room_id], nil, nil, sort)
-      render json: {messages: room_messages}, status: 200
+      pagination_meta = pagination_meta
+      render json: {messages: room_messages, links: pagination_meta}, status: 200
     else
       render_error('not_found', 404)
     end
@@ -36,5 +37,16 @@ class MessagesController < ApplicationController
     order = sort_param[0] == '-' ? ' ASC' : ' DESC'
     sort_param[0] = '' if sort_param[0] == '-'
     sort_param + order
+  end
+
+  def pagination_meta
+    if !index_params[:page] || index_params[:page] == 1
+      { next: "page=2" }
+    else
+      { prev: "page=#{index_params[:page] - 1}"}
+      { next: "page=#{index_params[:page] + 1}" }
+
+
+    end
   end
 end
