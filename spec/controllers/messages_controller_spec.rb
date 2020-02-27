@@ -48,12 +48,12 @@ RSpec.describe MessagesController, type: :controller do
       expect(response).to have_http_status(201)
     end
 
-    it 'returns a 404 code if message.room_id doesnt belong to an existent room' do
+    it 'returns a 422 code if message.room_id doesnt belong to an existent room' do
       room_id = 1234
       post :create, params: {room_id: room_id, text: 'nacho', author: 'nacho'}
       json_response = JSON.parse response.body
 
-      expect(response).to have_http_status(404)
+      expect(response).to have_http_status(422)
       expect(json_response['errors']).not_to eq(nil)
     end
 

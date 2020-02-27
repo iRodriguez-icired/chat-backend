@@ -1,14 +1,10 @@
 class MessagesController < ApplicationController
   def create
-    if Room.find(create_params['room_id'])
-      message = Message.new(create_params)
-      if message.save
-        render json: {message: message}, status: 201
-      else
-        render_error_from_details(message.errors.details, 422)
-      end
+    message = Message.new(create_params)
+    if message.save
+      render json: {message: message}, status: 201
     else
-      render_error('not_found', 404)
+      render_error_from_details(message.errors.details, 422)
     end
   end
 
@@ -41,11 +37,10 @@ class MessagesController < ApplicationController
 
   def pagination_meta
     if !index_params[:page] || index_params[:page] == 1
-      { next: "page=2" }
+      {next: 'page=2'}
     else
-      { prev: "page=#{index_params[:page] - 1}"}
-      { next: "page=#{index_params[:page] + 1}" }
-
+      {prev: "page=#{index_params[:page] - 1}"}
+      {next: "page=#{index_params[:page] + 1}"}
 
     end
   end
