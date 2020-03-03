@@ -10,7 +10,7 @@ RSpec.describe RoomsController, type: :controller do
     end
 
     it 'returns a 201 status code and a list of results when database has entries' do
-      room = Room.create(name: 'Room')
+      Room.create(name: 'Room')
       get :index
       expect(response).to have_http_status(200)
       json_response = JSON.parse response.body
