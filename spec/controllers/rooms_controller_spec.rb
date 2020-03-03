@@ -10,7 +10,7 @@ RSpec.describe RoomsController, type: :controller do
     end
 
     it 'returns a 201 status code and a list of results when database has entries' do
-      @room = Room.create(name: 'Room')
+      room = Room.create(name: 'Room')
       get :index
       expect(response).to have_http_status(200)
       json_response = JSON.parse response.body
@@ -20,18 +20,18 @@ RSpec.describe RoomsController, type: :controller do
 
   describe 'POST /room' do
     it 'returns a 201 status code, creates the room and return it if room is valid' do
-      @params = {"name": 'Sala 1'}
-      post :create, params: @params
+      params = {"name": 'Sala 1'}
+      post :create, params: params
       expect(response).to have_http_status(201)
       json_response = JSON.parse response.body
-      expect(json_response['room']['name']).to eq(@params[:name])
+      expect(json_response['room']['name']).to eq(params[:name])
       dbroom = Room.find_by(name: json_response['room']['name'])
       expect(dbroom).not_to eq nil
     end
 
     it 'returns a 422 status code if room creation fails and show a message error' do
-      @params = {"name": ''}
-      post :create, params: @params
+      params = {"name": ''}
+      post :create, params: params
       expect(response).to have_http_status(422)
 
       json_response = JSON.parse response.body
