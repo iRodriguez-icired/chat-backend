@@ -37,7 +37,8 @@ RSpec.describe MessagesController, type: :controller do
   describe 'POST /messages' do
     it 'create a new message into database and receive a 201 status code' do
       room_id = create(:room).id
-      post :create, params: {room_id: room_id, text: 'nacho', author: 'nacho'}
+      message = build(:message, room_id: room_id)
+      post :create, params: message.attributes
       json_parsed = parse_response(response)
       generated_message_id = json_parsed['message']['_id']
 
@@ -48,7 +49,8 @@ RSpec.describe MessagesController, type: :controller do
 
     it 'returns a 404 code if message.room_id doesnt belong to an existent room' do
       room_id = 1234
-      post :create, params: {room_id: room_id, text: 'nacho', author: 'nacho'}
+      message = build(:message, room_id: room_id)
+      post :create, params: message.attributes
       json_parsed = parse_response(response)
 
       expect(response).to have_http_status(404)
@@ -57,7 +59,8 @@ RSpec.describe MessagesController, type: :controller do
 
     it 'returns a 422 code and a message if text is blank' do
       room_id = create(:room).id
-      post :create, params: {room_id: room_id, text: '', author: 'nacho'}
+      message = build(:message, text: '      ', room_id: room_id)
+      post :create, params: message.attributes
       json_parsed = parse_response(response)
 
       expect(response).to have_http_status(422)
@@ -66,7 +69,8 @@ RSpec.describe MessagesController, type: :controller do
 
     it 'returns a 422 code and a message if author is blank' do
       room_id = create(:room).id
-      post :create, params: {room_id: room_id, text: 'hola', author: ''}
+      message = build(:message, author: '      ', room_id: room_id)
+      post :create, params: message.attributes
       json_parsed = parse_response(response)
 
       expect(response).to have_http_status(422)
