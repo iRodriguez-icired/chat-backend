@@ -6,7 +6,7 @@ gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 gem 'devise'
 gem 'jquery-rails'
 # Use Puma as the app server
-gem 'puma', '~> 4.1'
+gem 'puma', '~> 4.3'
 gem 'mongoid'
 gem 'will_paginate_mongoid'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
